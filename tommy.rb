@@ -67,7 +67,7 @@ helpers do
         "good"
       elsif score >= 40
         "bad"
-      elsif score >= 20
+      else
         "worse"
       end
     elsif project.is_building?
