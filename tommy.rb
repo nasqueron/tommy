@@ -29,11 +29,11 @@ class Project < Hashie::Dash
       returned_projects << Project.new( :name => project['displayName'].gsub('-', ' '),
                                         :build_score => project['healthReport'].first['score'].to_i,
                                         :last_build_number => project['builds'].first['number'],
-                                        :last_build_url => (project['lastBuild'].blank? ? "" : project['lastBuild']['url']),
-                                        :last_stable_build => (project['lastStableBuild'].blank? ? "" : project['lastStableBuild']['number']),
+                                        :last_build_url => (project['lastBuild'].blank? ? '' : project['lastBuild']['url']),
+                                        :last_stable_build => (project['lastStableBuild'].blank? ? '' : project['lastStableBuild']['number']),
                                         :health_report => project['healthReport'].first['description'],
-                                        :last_complete_url => (project['lastCompletedBuild'].blank? ? "" : project['lastCompletedBuild']['url']),
-                                        :last_failed_url => (project['lastFailedBuild'].blank? ? "" : project['lastFailedBuild']['url'] ),
+                                        :last_complete_url => (project['lastCompletedBuild'].blank? ? '' : project['lastCompletedBuild']['url']),
+                                        :last_failed_url => (project['lastFailedBuild'].blank? ? '' : project['lastFailedBuild']['url'] ),
                                         :colour => project['color'])
     end
 
@@ -61,20 +61,20 @@ helpers do
     score = project.build_score
     if project.is_green?
       if score == 100
-        "best"
+        'best'
       elsif score >= 80
-        "better"
+        'better'
       elsif score >= 60
-        "good"
+        'good'
       elsif score >= 40
-        "bad"
+        'bad'
       else
-        "worse"
+        'worse'
       end
     elsif project.is_building?
-      "building"
+      'building'
     else
-      "worst"
+      'worst'
     end
   end
 end
