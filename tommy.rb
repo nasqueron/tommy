@@ -58,20 +58,23 @@ get '/' do
 end
 
 helpers do
+  def css_for_score(score)
+    if score == 100
+      'best'
+    elsif score >= 80
+      'better'
+    elsif score >= 60
+      'good'
+    elsif score >= 40
+      'bad'
+    else
+      'worse'
+    end
+  end
+
   def css_for_project(project)
-    score = project.build_score
     if project.green?
-      if score == 100
-        'best'
-      elsif score >= 80
-        'better'
-      elsif score >= 60
-        'good'
-      elsif score >= 40
-        'bad'
-      else
-        'worse'
-      end
+      css_for_score(project.build_score)
     elsif project.building?
       'building'
     else
