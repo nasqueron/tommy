@@ -18,11 +18,11 @@ class Project < Hashie::Dash
   property :last_complete_url
   property :last_failed_url
   property :colour
-  
+
   def self.parse_incoming_json(json)
     returned_projects = []
     projects = json['jobs']
-    
+
     projects.each do |project|
       next if !project['buildable']
 
@@ -36,10 +36,10 @@ class Project < Hashie::Dash
                                         :last_failed_url => (project['lastFailedBuild'].blank? ? "" : project['lastFailedBuild']['url'] ),
                                         :colour => project['color'])
     end
-    
+
     return returned_projects
   end
-  
+
   def is_green?
     self.last_stable_build == self.last_build_number
   end
@@ -52,7 +52,7 @@ end
 get '/' do
   json = RestClient::Resource.new("#{HUDSON_URL}/api/json?depth=1")
   @projects = Project.parse_incoming_json(Crack::JSON.parse(json.get))
-  
+
   erb :index
 end
 
