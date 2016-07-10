@@ -11,7 +11,7 @@ MAINTAINER Sébastien Santoro aka Dereckson <dereckson+nasqueron-docker@espace-w
 #
 
 RUN mkdir -p /usr/src/app && \
-    git clone https://github.com/dereckson/Tommy.git /usr/src/app && \
+    git clone https://github.com/nasqueron/tommy.git /usr/src/app && \
     cd /usr/src/app && \
     bundle install
 
