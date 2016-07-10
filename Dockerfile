@@ -3,7 +3,7 @@
 # A simple Hudson/Jenkins dashboard view
 #
 
-FROM ruby:2.1
+FROM ruby:2.2
 MAINTAINER Sébastien Santoro aka Dereckson <dereckson+nasqueron-docker@espace-win.org>
 
 #
