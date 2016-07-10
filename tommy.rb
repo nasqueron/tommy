@@ -23,28 +23,30 @@ class Project < Hashie::Dash
     projects = json['jobs']
 
     projects.each do |project|
-      next if !project['buildable']
+      next unless project['buildable']
 
-      returned_projects << Project.new( :name => project['displayName'].gsub('-', ' '),
-                                        :build_score => project['healthReport'].first['score'].to_i,
-                                        :last_build_number => project['builds'].first['number'],
-                                        :last_build_url => (project['lastBuild'].blank? ? '' : project['lastBuild']['url']),
-                                        :last_stable_build => (project['lastStableBuild'].blank? ? '' : project['lastStableBuild']['number']),
-                                        :health_report => project['healthReport'].first['description'],
-                                        :last_complete_url => (project['lastCompletedBuild'].blank? ? '' : project['lastCompletedBuild']['url']),
-                                        :last_failed_url => (project['lastFailedBuild'].blank? ? '' : project['lastFailedBuild']['url'] ),
-                                        :colour => project['color'])
+      returned_projects << Project.new(
+        name: project['displayName'].tr('-', ' '),
+        build_score: project['healthReport'].first['score'].to_i,
+        last_build_number: project['builds'].first['number'],
+        last_build_url: (project['lastBuild'].blank? ? '' : project['lastBuild']['url']),
+        last_stable_build: (project['lastStableBuild'].blank? ? '' : project['lastStableBuild']['number']),
+        health_report: project['healthReport'].first['description'],
+        last_complete_url: (project['lastCompletedBuild'].blank? ? '' : project['lastCompletedBuild']['url']),
+        last_failed_url: (project['lastFailedBuild'].blank? ? '' : project['lastFailedBuild']['url']),
+        colour: project['color']
+      )
     end
 
     return returned_projects
   end
 
-  def is_green?
-    self.last_stable_build == self.last_build_number
+  def green?
+    last_stable_build == last_build_number
   end
 
-  def is_building?
-    self.colour.include?('anime')
+  def building?
+    colour.include?('anime')
   end
 end
 
@@ -58,7 +60,7 @@ end
 helpers do
   def css_for_project(project)
     score = project.build_score
-    if project.is_green?
+    if project.green?
       if score == 100
         'best'
       elsif score >= 80
@@ -70,7 +72,7 @@ helpers do
       else
         'worse'
       end
-    elsif project.is_building?
+    elsif project.building?
       'building'
     else
       'worst'
