@@ -1,0 +1,38 @@
+{
+  "exclude": [
+  ],
+  "linters": {
+    "chmod": {
+      "type": "chmod"
+    },
+    "filename": {
+      "type": "filename"
+    },
+    "json": {
+      "type": "json",
+      "include": [
+        "(^\\.arcconfig$)",
+        "(^\\.arclint$)",
+        "(\\.json$)"
+      ]
+    },
+    "merge-conflict": {
+      "type": "merge-conflict"
+    },
+    "rubocop": {
+      "type": "rubocop",
+      "include": "(\\.rb$)"
+    },
+    "ruby": {
+      "type": "ruby",
+      "include": "(\\.rb$)"
+    },
+    "spelling": {
+      "type": "spelling"
+    },
+    "xml": {
+      "type": "xml",
+      "include": "(\\.xml$)"
+    }
+  }
+}
