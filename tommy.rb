@@ -7,6 +7,7 @@ require 'erb'
 
 HUDSON_URL = ENV['HUDSON_URL'] || 'http://username:password@my.hudsonurl.com'
 
+# This class represents a defined or discrete hash for a Jenkins project.
 class Project < Hashie::Dash
   property :name
   property :build_score
