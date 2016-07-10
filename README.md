@@ -4,7 +4,7 @@
 
 To run the container:
 
-`docker run -d -it -p 4567:4567 --name=tommy -e HUDSON_URL=http://ci.nasqueron.org dereckson/tommy`
+`docker run -dt -p 4567:4567 --name=tommy -e HUDSON_URL=http://ci.nasqueron.org dereckson/tommy`
 
 The HUDSON_URL variable environment should point
 to your Jenkins or Hudson instance.
