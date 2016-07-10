@@ -1,7 +1,6 @@
 require 'sinatra'
 require 'rest-client'
 require 'active_support/all'
-require 'crack'
 require 'hashie'
 require 'erb'
 
@@ -51,7 +50,7 @@ end
 
 get '/' do
   json = RestClient::Resource.new("#{HUDSON_URL}/api/json?depth=1")
-  @projects = Project.parse_incoming_json(Crack::JSON.parse(json.get))
+  @projects = Project.parse_incoming_json(JSON.parse(json.get))
 
   erb :index
 end
