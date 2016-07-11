@@ -1,11 +1,42 @@
+#   -------------------------------------------------------------
+#   Tommy - Visualisation dashboard for Jenkins
+#   - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+#   Author:         Arfon Smitn (Zooniverse)
+#   Maintainer:     Sebastien Santoro aka Dereckson
+#   Project:        Nasqueron
+#   Created:        2011-09-14
+#   Dependencies:   Sinatra
+#   -------------------------------------------------------------
+
 require 'sinatra'
 require 'rest-client'
 require 'active_support/all'
 require 'hashie'
 require 'erb'
 
+#   -------------------------------------------------------------
+#   Table of contents
+#   - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+#
+#   :: Environment
+#   :: Project class
+#   :: Controller
+#   :: Routes
+#   :: Helpers
+#
+#   -------------------------------------------------------------
+
+#   -------------------------------------------------------------
+#   Environment
+#   - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
 HUDSON_URL = ENV['HUDSON_URL'] || 'http://username:password@my.hudsonurl.com'
 
+#   -------------------------------------------------------------
+#   Project class
+#   - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+##
 # This class represents a defined or discrete hash for a Jenkins project.
 class Project < Hashie::Dash
   property :name
@@ -18,65 +49,105 @@ class Project < Hashie::Dash
   property :last_failed_url
   property :colour
 
-  def self.parse_project(project)
-    Project.new(
-      name: project['displayName'].tr('-', ' '),
-      build_score: project['healthReport'].first['score'].to_i,
-      last_build_number: project['builds'].first['number'],
-      last_build_url: (project['lastBuild'].blank? ? '' : project['lastBuild']['url']),
-      last_stable_build: (project['lastStableBuild'].blank? ? '' : project['lastStableBuild']['number']),
-      health_report: project['healthReport'].first['description'],
-      last_complete_url: (project['lastCompletedBuild'].blank? ? '' : project['lastCompletedBuild']['url']),
-      last_failed_url: (project['lastFailedBuild'].blank? ? '' : project['lastFailedBuild']['url']),
-      colour: project['color']
+  ##
+  # Parses a job element of the Jenkins API.
+  # Returns a Project instance.
+  def self.parse_project(data)
+    project = Project.new(
+      name: data['displayName'].tr('-', ' '),
+      last_build_number: data['builds'].first['number'],
+      colour: data['color']
     )
-  end
 
-  def self.parse_incoming_json(json)
-    returned_projects = []
-    projects = json['jobs']
-
-    projects.each do |project|
-      next unless project['buildable']
-      begin
-        returned_projects << parse_project(project)
-      rescue
-        next
-      end
+    if data['healthReport']
+      project.build_score = data['healthReport'].first['score'].to_i
+      project.health_report = data['healthReport'].first['description']
     end
 
-    return returned_projects
+    unless data['lastStableBuild'].blank?
+      project.last_stable_build = data['lastStableBuild']['number']
+    end
+
+    urls = {
+      'lastBuild' => 'last_build_url=',
+      'lastCompletedBuild' => 'last_complete_url=',
+      'lastFailedBuild' => 'last_failed_url='
+    }
+    urls.each do |api_property, local_property|
+      next if data[api_property].blank?
+      project.send(local_property, data[api_property]['url'])
+    end
+
+    project
+  rescue NoMethodError
+    nil
   end
 
+  ##
+  # Parses a JSON API reply into an array of Project instances
+  def self.parse_incoming_json(json)
+    projects = []
+
+    json['jobs'].each do |job|
+      project = parse_project(job)
+      projects << project unless project.nil?
+    end
+
+    projects
+  end
+
+  ##
+  # Determines if a build is green
   def green?
     last_stable_build == last_build_number
   end
 
+  ##
+  # Determines if a build is still building
   def building?
     colour.include?('anime')
   end
 end
 
-get '/' do
+#   -------------------------------------------------------------
+#   Controller
+#   - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+def prepare_dashboard
   json = RestClient::Resource.new("#{HUDSON_URL}/api/json?depth=1")
   @projects = Project.parse_incoming_json(JSON.parse(json.get))
 
   erb :index
 end
 
+#   -------------------------------------------------------------
+#   Routes
+#   - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+get '/' do
+  prepare_dashboard
+end
+
+#   -------------------------------------------------------------
+#   Helpers
+#   - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
 helpers do
+  def css_scores
+    {
+      100 => 'best',
+      80 => 'better',
+      60 => 'good',
+      40 => 'bad',
+      0 => 'worse'
+    }
+  end
+
   def css_for_score(score)
-    if score == 100
-      'best'
-    elsif score >= 80
-      'better'
-    elsif score >= 60
-      'good'
-    elsif score >= 40
-      'bad'
-    else
-      'worse'
+    css_scores.each do |threshold, css_class|
+      return css_class if score >= threshold
     end
+    raise 'Specify in scores a value for the lower score you can get.'
   end
 
   def css_for_project(project)
