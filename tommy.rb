@@ -18,24 +18,31 @@ class Project < Hashie::Dash
   property :last_failed_url
   property :colour
 
+  def self.parse_project(project)
+    Project.new(
+      name: project['displayName'].tr('-', ' '),
+      build_score: project['healthReport'].first['score'].to_i,
+      last_build_number: project['builds'].first['number'],
+      last_build_url: (project['lastBuild'].blank? ? '' : project['lastBuild']['url']),
+      last_stable_build: (project['lastStableBuild'].blank? ? '' : project['lastStableBuild']['number']),
+      health_report: project['healthReport'].first['description'],
+      last_complete_url: (project['lastCompletedBuild'].blank? ? '' : project['lastCompletedBuild']['url']),
+      last_failed_url: (project['lastFailedBuild'].blank? ? '' : project['lastFailedBuild']['url']),
+      colour: project['color']
+    )
+  end
+
   def self.parse_incoming_json(json)
     returned_projects = []
     projects = json['jobs']
 
     projects.each do |project|
       next unless project['buildable']
-
-      returned_projects << Project.new(
-        name: project['displayName'].tr('-', ' '),
-        build_score: project['healthReport'].first['score'].to_i,
-        last_build_number: project['builds'].first['number'],
-        last_build_url: (project['lastBuild'].blank? ? '' : project['lastBuild']['url']),
-        last_stable_build: (project['lastStableBuild'].blank? ? '' : project['lastStableBuild']['number']),
-        health_report: project['healthReport'].first['description'],
-        last_complete_url: (project['lastCompletedBuild'].blank? ? '' : project['lastCompletedBuild']['url']),
-        last_failed_url: (project['lastFailedBuild'].blank? ? '' : project['lastFailedBuild']['url']),
-        colour: project['color']
-      )
+      begin
+        returned_projects << parse_project(project)
+      rescue
+        next
+      end
     end
 
     return returned_projects
