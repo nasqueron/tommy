@@ -128,6 +128,11 @@ get '/' do
   prepare_dashboard
 end
 
+get '/manifest.json' do
+  content_type 'application/json'
+  erb :manifest
+end
+
 get '/status' do
   'ALIVE'
 end
