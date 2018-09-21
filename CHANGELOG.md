@@ -5,11 +5,13 @@ This project adheres to [semantic versioning](https://semver.org/).
 ## [1.0.0] - 2018-09-21
 ### Added
 - Jenkins 2.0 multi-branch pipelines are supported.
+
 ### Changed
 - JENKINS_URL must be used instead of HUDSON_URL to configure instance.
 - An exit code 1 is provided when the configuration is missing.
 - Recommended Docker image is now nasqueron/tommy. 
 - Documentation is improved.
+
 ### Fixed
 - Dependencies and suggested Ruby version upgrade
 - Code style has been improve to adhere to another
