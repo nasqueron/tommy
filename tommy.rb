@@ -8,11 +8,11 @@
 #   Dependencies:   Sinatra
 #   -------------------------------------------------------------
 
-require 'sinatra'
 require 'rest-client'
 require 'active_support/all'
 require 'hashie'
 require 'erb'
+require 'sinatra'
 
 #   -------------------------------------------------------------
 #   Table of contents
