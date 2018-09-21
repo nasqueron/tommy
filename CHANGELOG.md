@@ -1,6 +1,6 @@
 # Changelog
 All notable changes to this project will be documented in this file.
-This project adheres to [semantic versioning](http://semver.org/).
+This project adheres to [semantic versioning](https://semver.org/).
 
 ## [0.5.0] - 2016-07-21
 ### Added

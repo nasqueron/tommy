@@ -37,7 +37,7 @@ begin
 rescue KeyError
   $stderr.write %(You must define JENKINS_URL to your Jenkins instance URL.
 
-If you need to pass credentials, you can use the syntax http://username:password@jenkins.domain.tld.
+If you need to pass credentials, you can use the syntax https://username:password@jenkins.domain.tld.
 )
   exit 1
 end
