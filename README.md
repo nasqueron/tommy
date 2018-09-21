@@ -4,9 +4,9 @@
 
 To run the container:
 
-`docker run -dt -p 4567:4567 --name=tommy -e HUDSON_URL=http://ci.nasqueron.org nasqueron/tommy`
+`docker run -dt -p 4567:4567 --name=tommy -e JENKINS_URL=http://ci.nasqueron.org nasqueron/tommy`
 
-The HUDSON_URL variable environment should point
+The JENKINS_URL variable environment should point
 to your Jenkins or Hudson instance.
 
 If a login is required to use the API,
