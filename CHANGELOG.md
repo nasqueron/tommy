@@ -9,7 +9,7 @@ This project adheres to [semantic versioning](https://semver.org/).
 ### Changed
 - JENKINS_URL must be used instead of HUDSON_URL to configure instance.
 - An exit code 1 is provided when the configuration is missing.
-- Recommended Docker image is now nasqueron/tommy. 
+- Recommended Docker image is now nasqueron/tommy.
 - Documentation is improved.
 
 ### Fixed
