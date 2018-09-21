@@ -52,11 +52,22 @@ class Project < Hashie::Dash
   property :colour
 
   ##
+  # Builds a project name from a name and a prefix
+  # Returns a string.
+  def self.build_name(name, prefix)
+    return name if prefix.nil?
+
+    [prefix, name.tr('-', ' ')].join(' / ')
+  end
+
+  ##
   # Parses a job element of the Jenkins API.
   # Returns a Project instance.
-  def self.parse_project(data)
+  def self.parse_project(data, prefix = nil)
+    name = build_name(data['displayName'], prefix)
+
     project = Project.new(
-      name: data['displayName'].tr('-', ' '),
+      name: name,
       last_build_number: data['builds'].first['number'],
       colour: data['color']
     )
@@ -86,14 +97,38 @@ class Project < Hashie::Dash
     nil
   end
 
+  def self.multi_project?(data)
+    data['_class'].start_with?('org.jenkinsci.plugins.workflow.multibranch')
+  end
+
   ##
   # Parses a JSON API reply into an array of Project instances
   def self.parse_incoming_json(json)
     projects = []
 
     json['jobs'].each do |job|
-      project = parse_project(job)
-      projects << project unless project.nil?
+      parse_projects(job).each do |project|
+        projects << project unless project.nil?
+      end
+    end
+
+    projects
+  end
+
+  def self.parse_projects(job)
+    if multi_project?(job)
+      parse_multi_projects(job)
+    else
+      [parse_project(job)]
+    end
+  end
+
+  def self.parse_multi_projects(root_job)
+    projects = []
+    prefix = root_job['name']
+
+    root_job['jobs'].each do |job|
+      projects << parse_project(job, prefix)
     end
 
     projects
@@ -117,7 +152,7 @@ end
 #   - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
 def prepare_dashboard
-  json = RestClient::Resource.new("#{JENKINS_URL}/api/json?depth=1")
+  json = RestClient::Resource.new("#{JENKINS_URL}/api/json?depth=2")
   @projects = Project.parse_incoming_json(JSON.parse(json.get))
 
   erb :index
