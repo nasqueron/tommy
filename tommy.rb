@@ -35,13 +35,42 @@ require 'sinatra'
 begin
   JENKINS_URL = ENV.fetch('JENKINS_URL')
 rescue KeyError
-  $stderr.write %(You must define JENKINS_URL to your Jenkins instance URL.
-
-If you need to pass credentials, you can use the syntax https://username:password@jenkins.domain.tld.
+  # HUDSON_URL is deprecated and will be removed in Tommy 2.0.
+  if ENV.include? 'HUDSON_URL'
+    JENKINS_URL = ENV['HUDSON_URL']
+    $stderr.write %(\e[31m
+╔══════════════════════════════════════════════════════════╗
+║                 *** DEPRECATION NOTICE ***               ║
+╟──────────────────────────────────────────────────────────╢
+║                                                          ║
+║ You currently use the HUDSON_URL environment variable    ║
+║ to configure your Jenkins (or Hudson?) instance URL.     ║
+║                                                          ║
+║ As Hudson isn't maintained anymore, we're migrating this ║
+║ setting to JENKINS_URL.                                  ║
+║                                                          ║
+║ Simply replace HUDSON_URL by JENKINS_URL in your Docker  ║
+║ or service configuration.                                ║
+║                                                          ║
+║ The current setting is deprecated and will be dropped    ║
+║ in a future version (plan is Tommy 2.0).                 ║
+║                                                          ║
+║ Reference: https://devcentral.nasqueron.org/T1448        ║
+║                                                          ║
+╚══════════════════════════════════════════════════════════╝
+\e[0m
 )
-  exit 1
-end
+  else
+    $stderr.write %(You must define the JENKINS_URL environment variable
+to point to your Jenkins instance URL, without trailing slash.
 
+If you need to pass credentials, you can use the following syntax:
+https://username:password@jenkins.domain.tld
+)
+    exit 1
+
+  end
+end
 #   -------------------------------------------------------------
 #   Project class
 #   - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -

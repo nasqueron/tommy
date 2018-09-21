@@ -2,6 +2,18 @@
 All notable changes to this project will be documented in this file.
 This project adheres to [semantic versioning](https://semver.org/).
 
+## [1.0.1] - 2018-09-21
+### Deprecated
+- HUDSON_URL environment variable is now deprecated.
+  Use JENKINS_URL instead. Will be removed in 2.0.
+
+### Changed
+- You can still use the deprecate HUDSON_URL environment
+  variable. The server will print a deprecation notice.
+
+### Fixed
+- Fix issue where builds URL were not show anymore.
+
 ## [1.0.0] - 2018-09-21
 ### Added
 - Jenkins 2.0 multi-branch pipelines are supported.
