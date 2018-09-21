@@ -10,11 +10,13 @@ See https://builds.nasqueron.org for a live example.
 
 ### Getting started
 
-Put your Jenkins URL in place (HUDSON_URL) and boot the app.
+Put your Jenkins URL in place (JENKINS_URL) and boot the app.
 If you are password protecting your Hudson dashboard then encode like this:
 https://username:password@instance.domain.tld
 
-A Docker image is also provided:
+### Run with Docker
+
+A Docker image is also provided. It exposes a WEBrick server on the port 4567.
 
 ```
 docker pull nasqueron/tommy
