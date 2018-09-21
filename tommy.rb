@@ -90,9 +90,9 @@ class Project < Hashie::Dash
     end
 
     urls = {
-      lastBuild: 'last_build_url=',
-      lastCompletedBuild: 'last_complete_url=',
-      lastFailedBuild: 'last_failed_url='
+      'lastBuild' => 'last_build_url=',
+      'lastCompletedBuild' => 'last_complete_url=',
+      'lastFailedBuild' => 'last_failed_url='
     }
     urls.each do |api_property, local_property|
       next if data[api_property].blank?
