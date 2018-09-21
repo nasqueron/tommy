@@ -21,6 +21,13 @@ docker pull nasqueron/tommy
 docker run -dt -p 8080:4567 -e JENKINS_URL=http://ci.domain.tld nasqueron/tommy
 ```
  
+### Exit codes
+
+The app uses the following exit codes:
+
+*   0: regular exit
+*   1: required configuration environment variable is missing
+
 ### Contributors
 
 * Written by [@arfon](http://twitter.com/arfon "Twitter")
