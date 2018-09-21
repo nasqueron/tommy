@@ -32,7 +32,7 @@ require 'sinatra'
 #   Environment
 #   - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-HUDSON_URL = ENV['HUDSON_URL'] || 'http://username:password@my.hudsonurl.com'
+JENKINS_URL = ENV['JENKINS_URL'] || 'http://username:password@jenkins.domain.tld'
 
 #   -------------------------------------------------------------
 #   Project class
@@ -117,7 +117,7 @@ end
 #   - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
 def prepare_dashboard
-  json = RestClient::Resource.new("#{HUDSON_URL}/api/json?depth=1")
+  json = RestClient::Resource.new("#{JENKINS_URL}/api/json?depth=1")
   @projects = Project.parse_incoming_json(JSON.parse(json.get))
 
   erb :index

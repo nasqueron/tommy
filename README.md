@@ -18,7 +18,7 @@ A Docker image is also provided:
 
 ```
 docker pull nasqueron/tommy
-docker run -dt -p 8080:4567 -e HUDSON_URL=http://ci.domain.tld nasqueron/tommy
+docker run -dt -p 8080:4567 -e JENKINS_URL=http://ci.domain.tld nasqueron/tommy
 ```
  
 ### Contributors
