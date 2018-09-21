@@ -77,6 +77,7 @@ class Project < Hashie::Dash
     }
     urls.each do |api_property, local_property|
       next if data[api_property].blank?
+
       project.send(local_property, data[api_property]['url'])
     end
 
