@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 #   -------------------------------------------------------------
 #   Tommy - Visualisation dashboard for Jenkins
 #   - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
