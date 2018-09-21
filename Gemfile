@@ -1,10 +1,10 @@
 source 'http://rubygems.org'
-gem 'sinatra'
-gem 'rest-client'
 gem 'activesupport'
+gem 'hashie'
 gem 'i18n'
 gem 'json'
-gem 'hashie'
+gem 'rest-client'
+gem 'sinatra'
 
 group :development do
   gem 'shotgun'
