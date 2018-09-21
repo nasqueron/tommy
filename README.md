@@ -17,8 +17,8 @@ http://username:password@instance.domain.tld
 A Docker image is also provided:
 
 ```
-docker pull dereckson/tommy
-docker run -dt -p 8080:4567 -e HUDSON_URL=http://ci.domain.tld dereckson/tommy
+docker pull nasqueron/tommy
+docker run -dt -p 8080:4567 -e HUDSON_URL=http://ci.domain.tld nasqueron/tommy
 ```
  
 ### Contributors
