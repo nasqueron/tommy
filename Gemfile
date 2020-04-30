@@ -4,7 +4,7 @@ source 'http://rubygems.org'
 gem 'activesupport'
 gem 'hashie'
 gem 'i18n'
-gem 'json'
+gem 'json', '>= 2.3.0'
 gem 'rest-client'
 gem 'sinatra', '>= 2.0.4'
 
