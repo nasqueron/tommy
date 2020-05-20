@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 source 'http://rubygems.org'
-gem 'activesupport'
+gem 'activesupport', '>= 5.2.4.3'
 gem 'hashie'
 gem 'i18n'
 gem 'json'
