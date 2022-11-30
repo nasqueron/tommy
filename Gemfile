@@ -6,7 +6,7 @@ gem 'hashie'
 gem 'i18n'
 gem 'json'
 gem 'rest-client'
-gem 'sinatra', '>= 2.0.4'
+gem 'sinatra', '>= 2.2.3'
 
 group :development do
   gem 'shotgun', '<= 0.9.2'
