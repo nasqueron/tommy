@@ -1,6 +1,6 @@
 #
 # Tommy Docker image
-# A simple Hudson/Jenkins dashboard view
+# A simple Jenkins dashboard view
 #
 
 FROM ruby:2.5
@@ -12,10 +12,9 @@ MAINTAINER Sébastien Santoro aka Dereckson <dereckson+nasqueron-docker@espace-w
 
 ENV LANG C.UTF-8
 
-RUN mkdir -p /usr/src/app && \
-    git clone https://github.com/nasqueron/tommy.git /usr/src/app && \
-    cd /usr/src/app && \
-    bundle install
+RUN mkdir -p /usr/src/app
+COPY . /usr/src/app/
+RUN cd /usr/src/app && bundle install
 
 #
 # Run the container
