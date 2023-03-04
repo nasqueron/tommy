@@ -71,6 +71,13 @@ https://username:password@jenkins.domain.tld
 
   end
 end
+
+begin
+  JENKINS_MULTI_BRANCH = !!ENV.fetch('JENKINS_MULTI_BRANCH')
+rescue KeyError
+  JENKINS_MULTI_BRANCH = false
+end
+
 #   -------------------------------------------------------------
 #   Project class
 #   - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -188,9 +195,19 @@ end
 #   Controller
 #   - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
+def build_jenkins_url
+  if JENKINS_MULTI_BRANCH
+    "#{JENKINS_URL}/api/json?depth=2"
+  else
+    "#{JENKINS_URL}/api/json?depth=1"
+  end
+end
+
 def prepare_dashboard
-  json = RestClient::Resource.new("#{JENKINS_URL}/api/json?depth=2")
-  @projects = Project.parse_incoming_json(JSON.parse(json.get))
+  url = build_jenkins_url
+  client = RestClient::Resource.new(url)
+  response = JSON.parse(client.get)
+  @projects = Project.parse_incoming_json(response)
 
   erb :index
 end
