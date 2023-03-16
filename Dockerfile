@@ -3,7 +3,7 @@
 # A simple Jenkins dashboard view
 #
 
-FROM ruby:2.5
+FROM ruby:3.2
 MAINTAINER Sébastien Santoro aka Dereckson <dereckson+nasqueron-docker@espace-win.org>
 
 #
