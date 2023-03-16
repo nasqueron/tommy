@@ -2,6 +2,16 @@
 All notable changes to this project will be documented in this file.
 This project adheres to [semantic versioning](https://semver.org/).
 
+## [1.1.0] - 2023-03-16
+### Changed
+- Application now runs under 3.2, Sinatra 3.0, Rack 2.2
+- Docker build instructions (`Dockerfile`) are now in this repository.
+
+### Fixed
+- Disable by default the support for Jenkins multi branch,
+  as it can creates a timeout on large Jenkins installations.
+  To enable it, put in environment `JENKINS_MULTI_BRANCH=True`.
+
 ## [1.0.1] - 2018-09-21
 ### Deprecated
 - HUDSON_URL environment variable is now deprecated.
